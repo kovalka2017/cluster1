@@ -1,1 +1,57 @@
-123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123
+name: CI/CD pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Lookup repo
+        uses: actions/checkout@v3
+
+      - name: Login Google Cloud 
+        uses: google-github-actions/auth@v1
+        with: 
+          credential_json: ${{ secrets.GCP_CREDENTIALS }}
+
+      - name: Configure Docker to use gcloud
+        run: |
+          gcloud auth configure-docker
+          gcloud auth configure-docker us-central1-docker.pkg.dev
+
+      - name: Build Docker Image 
+        run: docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/custom-nginx-busybox-deployment-image:latest .
+
+      - name: Push Docker image to GCR 
+        run: docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/custom-nginx-busybox-deployment-image:latest
+
+  deploy: 
+    runs-on: ubuntu-latest
+    needs: build 
+    steps:
+      - name: Lookup repo
+        uses: actions/checkout@v3
+
+      - name: Login Google Cloud 
+        uses: google-github-actions/auth@v1
+        with: 
+          credential_json: ${{ secrets.GCP_CREDENTIALS }}
+        
+      - name: Set up K8s 
+        uses: google-github-actions/setup-gcloud@v1
+
+      - name: Configure kubectl
+        run: |
+          gcloud components install gke-gcloud-auth-plugin
+          gcloud container clusters get-credentials cluster-3 --region us-central1-c --project ${{ secrets.GCP_PROJECT_ID }}
+
+      - name: Deploy to K8s 
+        run: kubectl -f nginx-busybox-deployment.yaml
+
+      - name: Update image 
+        run: kubectl set deployment/nginx-busybox-deployment nginx-1=gcr.io/${{ secrets.GCP_PROJECT_ID }}/custom-nginx-busybox-deployment-image:latest
+
