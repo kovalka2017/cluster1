@@ -52,5 +52,5 @@ jobs:
         run: kubectl apply -f nginx-busybox-deployment.yaml
 
       - name: Update image 
-        run: kubectl set deployment/nginx-busybox-deployment nginx-1=gcr.io/${{ secrets.GCP_PROJECT_ID }}/custom-nginx-busybox-deployment-image:latest
+        run: kubectl set image deployment/nginx-busybox-deployment nginx-1=gcr.io/${{ secrets.GCP_PROJECT_ID }}/custom-nginx-busybox-deployment-image:latest
 
