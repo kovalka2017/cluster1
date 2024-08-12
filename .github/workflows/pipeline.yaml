@@ -20,7 +20,7 @@ jobs:
       - name: Configure Docker to use gcloud
         run: |
           gcloud auth configure-docker
-          gcloud auth configure-docker us-central1-docker.pkg.dev
+          gcloud auth configure-docker us-central1-c-docker.pkg.dev
 
       - name: Build Docker Image 
         run: docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/custom-nginx-busybox-deployment-image:latest .
