@@ -9,7 +9,7 @@ spec:
   replicas: 3
   selector:
     matchLabels:
-      app: nnginx-busybox-deployment
+      app: nginx-busybox-deployment
   strategy:
     rollingUpdate:
       maxSurge: 25%
