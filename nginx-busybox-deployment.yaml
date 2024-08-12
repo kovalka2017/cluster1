@@ -21,7 +21,7 @@ spec:
         app: nginx-busybox-deployment
     spec:
       containers:
-      - image: nginx:latest
+      - image: gcr.io/dynamic-circle-431306-h3/custom-nginx-busybox-deployment-image:latest
         imagePullPolicy: Always
         name: nginx-1
         ports:  
