@@ -46,7 +46,7 @@ jobs:
       - name: Configure kubectl
         run: |
           gcloud components install gke-gcloud-auth-plugin
-          gcloud container clusters get-credentials cluster-3 --region us-central1-c --project ${{ secrets.GCP_PROJECT_ID }}
+          gcloud container clusters get-credentials cluster-1 --region us-central1-c --project ${{ secrets.GCP_PROJECT_ID }}
 
       - name: Deploy to K8s 
         run: kubectl -f nginx-busybox-deployment.yaml
