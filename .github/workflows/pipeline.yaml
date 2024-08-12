@@ -38,7 +38,7 @@ jobs:
       - name: Login Google Cloud 
         uses: google-github-actions/auth@v1
         with: 
-          credential_json: ${{ secrets.GCP_CREDENTIALS }}
+          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
         
       - name: Set up K8s 
         uses: google-github-actions/setup-gcloud@v1
