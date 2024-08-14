@@ -33,4 +33,17 @@ spec:
         - sh
         - -c
         - echo Hello from BusyBox! && sleep 3600
-
+      tolerations:
+      - key: "app"
+        operator: "Equal"
+        value: "nginx"
+        effect: "NoSchedule"
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - nginx

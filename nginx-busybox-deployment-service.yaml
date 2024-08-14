@@ -1,0 +1,14 @@
+apiVersion: v1 
+kind: Service
+metadata:
+  name: deployment-service
+  annotations:
+    cloud.google.com/neg: '{"ingress": true}'
+    cloud.google.com/neg: '{"exposed_ports": {"80":{"name": "nginx-busybox-neg"}}}'
+spec:
+  type: ClusterIP
+  ports:
+  - targetPort: 80
+    port: 80
+  selector:
+    app: nginx-busybox-deployment
